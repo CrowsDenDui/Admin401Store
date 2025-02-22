@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
 
+
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.database
@@ -145,14 +146,24 @@ class LoginActivity : AppCompatActivity() {
                                 "Successfully sign in with Google",
                                 Toast.LENGTH_SHORT
                             ).show()
-                            updateUI(null)
+                            updateUI(authTask.result?.user)
+                            finish()
                         } else {
                             Toast.makeText(this, "Google Sign-in Failed", Toast.LENGTH_SHORT).show()
                         }
                     }
-                }else {
-                Toast.makeText(this, "Google Sign-in Failed", Toast.LENGTH_SHORT).show()
-            }
+                } else {
+                    Toast.makeText(this, "Google Sign-in Failed", Toast.LENGTH_SHORT).show()
+                }
             }
         }
+    //check if user is already log in
+    override fun onStart(){
+        super.onStart()
+        val currentUser : FirebaseUser? = auth.currentUser
+        if (currentUser != null){
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
+    }
 }
